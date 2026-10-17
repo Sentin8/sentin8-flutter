@@ -1,4 +1,4 @@
-# DESIGN.md: sentin8-flutter — Detailed Design Document
+# sentin8-flutter — Detailed Design Document
 
 > Wire-level construction of the platform Flutter package. Overview in
 > `README.md`; business framing in `BUSINESS.md`.

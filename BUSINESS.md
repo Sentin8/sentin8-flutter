@@ -1,4 +1,4 @@
-# BUSINESS.md: sentin8-flutter — Business Requirements & Functionality
+# sentin8-flutter — Business Requirements & Functionality
 
 > Audience: product owners, business analysts, and anyone evaluating what
 > sentin8-flutter **does for the business**. For the overview read
