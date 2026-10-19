@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 name: sentin8
-description: Sentin8 Flutter SDK — unified infrastructure for all Sentin8 Flutter apps (web + native).
+description: Sentin8 Flutter SDK - unified infrastructure for all Sentin8 Flutter apps (web + native).
 version: 0.1.0
 publish_to: 'none'
 

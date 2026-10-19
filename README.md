@@ -1,9 +1,9 @@
-# sentin8-flutter — Platform Flutter Package
+# sentin8-flutter - Platform Flutter Package
 
 ## 1. Summary
 
 The **single** Sentin8 Flutter package: all shared Flutter
-infrastructure (native + web) lives here — the sentin8 theme and
+infrastructure (native + web) lives here - the sentin8 theme and
 design system, the shell/bootstrap widgets, and `Bff8ApiClient`
 (the only approved backend path for every app; apps never call
 backend services directly, architecture-principles §Flutter).
@@ -12,7 +12,7 @@ backend services directly, architecture-principles §Flutter).
 
 - **One package, no copy-paste.** Theme, boot, and the BFF client are
   implemented once; apps import what they need.
-- **Native-only features** are guarded by conditional imports — the
+- **Native-only features** are guarded by conditional imports - the
   web build never links native-only code.
 - **Design system compliance by construction**: 4px grid, glass
   panels, Royal Gold `#D4AF37` accent, Inter font, WCAG AA minimum;
@@ -38,7 +38,7 @@ dependencies:
 ```
 
 All backend traffic routes through `Bff8ApiClient →
-Sentin8:BFF /proxy/{service}/…` — the standalone direct-HTTP pattern
+Sentin8:BFF /proxy/{service}/…` - the standalone direct-HTTP pattern
 is deprecated (design `sentin8-flutter-component-library.md`).
 
 ---
