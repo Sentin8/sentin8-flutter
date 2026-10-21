@@ -75,11 +75,11 @@ class AppRuntimeContext {
           : organizationName.isNotEmpty ? organizationName
           : appSlug;
 
-  /// Auth issuer URL (e.g. https://sentin8-auth.prod.acme.sentin8.local)
+  /// Auth issuer URL (e.g. https://sentin8-auth.prod.acme.local.sentin8.dev)
   String get authIssuer => 'https://$authDomain';
 
   /// BFF base URL for this app instance
-  /// e.g. https://bff.bank8-ebank.prod.acme.sentin8.local
+  /// e.g. https://bff.bank8-ebank.prod.acme.local.sentin8.dev
   String get bffBaseUrl => 'https://$bffDomain';
 
   /// The Auth group name for this app instance.
@@ -162,13 +162,13 @@ class AppRuntimeContext {
 /// The request is routed through TLS which injects X-Sentin8-* headers
 /// based on the hostname. No API key or hostname parameter is needed.
 ///
-/// [appBaseUrl] defaults to https://sentin8-app.ops.sys.sentin8.local.
+/// [appBaseUrl] defaults to https://sentin8-app.ops.sys.local.sentin8.dev.
 /// [logPrefix] is used for debug logging (e.g. 'eBank', 'eTeller').
 Future<AppRuntimeContext> fetchRuntimeContext({
   String? appBaseUrl,
   String logPrefix = 'App',
 }) async {
-  final base = appBaseUrl ?? 'https://sentin8-app.ops.sys.sentin8.local';
+  final base = appBaseUrl ?? 'https://sentin8-app.ops.sys.local.sentin8.dev';
 
   final url = Uri.parse('$base/v1/app/runtime/context');
 
