@@ -36,3 +36,4 @@ format-check: ## dart format --set-exit-if-changed
 
 clean: ## flutter clean
 	@flutter clean
+	@rm -rf .run .run/logs .tmp
