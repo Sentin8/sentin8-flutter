@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Sentin8:Flutter
 // SPDX-License-Identifier: Apache-2.0
 
-// BFF proxy access layer — generic API client for all Sentin8 apps.
+// BFF proxy access layer - generic API client for all Sentin8 apps.
 //
 // All backend communication goes through BFF proxy routes.
 // The Flutter app only sends its session token (cookie-based on web).
@@ -30,7 +30,7 @@ class BffApiClient {
   /// `POST /delegate/start`). When set, every request carries
   /// `X-BFF-Delegation` so the BFF attaches the customer-approved,
   /// time-boxed delegated token instead of the caller's own session token.
-  /// Staff/customer-data access ALWAYS goes through this — never a
+  /// Staff/customer-data access ALWAYS goes through this - never a
   /// standing staff scope.
   final String? delegationId;
 
@@ -45,7 +45,7 @@ class BffApiClient {
   /// Build the full proxy URL for a given path.
   /// e.g. /accounts → https://{bff}/proxy/ledger/accounts
   ///
-  /// The org/env is NOT appended as query params — the BFF proxy
+  /// The org/env is NOT appended as query params - the BFF proxy
   /// resolves the target org/env from the TLS-injected X-Sentin8-Env-Id
   /// header (which comes from the request hostname).
   /// Adding target_org_id/target_env_id would trigger BFF token delegation,

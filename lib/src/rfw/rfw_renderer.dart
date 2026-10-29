@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Sentin8:Flutter
 // SPDX-License-Identifier: Apache-2.0
 
-// RFW Renderer — inflates RemoteWidget definitions into native Flutter widgets.
+// RFW Renderer - inflates RemoteWidget definitions into native Flutter widgets.
 //
 // Supports: Container, Text, DataTable, Form, Button, Card, Chart, Native,
 // Row, Column, Spacer.
@@ -185,7 +185,7 @@ class RfwRenderer extends StatelessWidget {
                                   action.endpoint!.replaceAll(
                                       '{id}', row['id']?.toString() ?? ''),
                                   {});
-                              // Handle redirect response — navigate to the
+                              // Handle redirect response - navigate to the
                               // returned route (e.g. after install, redirect
                               // to the instance page).
                               if (result.responseType == 'redirect' &&
@@ -193,7 +193,7 @@ class RfwRenderer extends StatelessWidget {
                                 actions.onNavigate(result.redirectRoute!);
                               }
                             } catch (_) {
-                              // Silently ignore — the error is already logged
+                              // Silently ignore - the error is already logged
                               // by the ApiClient.
                             }
                           },
@@ -204,7 +204,7 @@ class RfwRenderer extends StatelessWidget {
           }).toList();
         }
 
-        // Card-based layout for all screen sizes — flexible, scrollable,
+        // Card-based layout for all screen sizes - flexible, scrollable,
         // and mobile-friendly. Each row becomes a card with label:value
         // fields and action buttons at the bottom.
         return SingleChildScrollView(
@@ -240,7 +240,7 @@ class RfwRenderer extends StatelessWidget {
                           ),
                         );
                       }),
-                      // Action buttons row — right-aligned.
+                      // Action buttons row - right-aligned.
                       if (hasRowActions)
                         Padding(
                           padding: const EdgeInsets.only(top: 8),
@@ -287,7 +287,7 @@ class RfwRenderer extends StatelessWidget {
     final route = w.props['route'] as String?;
     final iconCode = w.props['icon'] as String?;
 
-    // Build the button child — support multi-line labels (split on \n)
+    // Build the button child - support multi-line labels (split on \n)
     // and optional leading icons (Material Icons hex code points).
     final labelLines = label.split('\n');
     final hasIcon = iconCode != null && iconCode.isNotEmpty;
@@ -409,7 +409,7 @@ class RfwRenderer extends StatelessWidget {
     final widgetName = w.props['widget_name'] as String? ?? '';
     final dataEndpoint = w.props['data_endpoint'] as String?;
 
-    // Native widget host registry — the dash ships with built-in widgets
+    // Native widget host registry - the dash ships with built-in widgets
     // for complex interactive pages that RFW can't handle.
     return (actions.renderNativeWidget
             ?.call(widgetName, w.props, dataEndpoint)) ??
@@ -701,7 +701,7 @@ class _RfwFormState extends State<RfwForm> {
   }
 
   Widget _buildField(FormFieldDef f) {
-    // Hidden fields don't render a widget — their value comes from
+    // Hidden fields don't render a widget - their value comes from
     // extraProps (e.g. listing_id pre-filled from the URL).
     if (f.fieldType == 'hidden') {
       return const SizedBox.shrink();
@@ -804,7 +804,7 @@ class _RfwFormState extends State<RfwForm> {
               _ => null,
             },
             // Commit on every keystroke (not only at form.save) so the
-            // form state always reflects what the user typed — a submit
+            // form state always reflects what the user typed - a submit
             // that races ahead of form.save would send empty values.
             onChanged: (v) {
               _values[f.key] = v ?? '';
@@ -867,7 +867,7 @@ class CheckboxFormField extends FormField<bool> {
         );
 }
 
-/// Toggle switch form field — used for boolean parameters.
+/// Toggle switch form field - used for boolean parameters.
 class SwitchFormField extends FormField<bool> {
   SwitchFormField(
       {required String label, required ValueChanged<bool> onChanged, bool initialValue = false, super.key})
@@ -1016,7 +1016,7 @@ class _MultiSelectFieldState extends State<_MultiSelectField> {
   }
 }
 
-/// Autocomplete multi-select field — a text input that filters options as
+/// Autocomplete multi-select field - a text input that filters options as
 /// the user types, with chips showing selected items. Clicking a suggestion
 /// adds it to the selection. Chips can be tapped to remove.
 class _AutocompleteField extends StatefulWidget {
@@ -1155,7 +1155,7 @@ class _AutocompleteFieldState extends State<_AutocompleteField> {
   }
 }
 
-/// Key-value field — renders a dynamic list of parameter name/value pairs.
+/// Key-value field - renders a dynamic list of parameter name/value pairs.
 /// The user can add/remove rows. The result is a Map<String, String> passed
 /// to onChanged, suitable for JSON parameters blobs.
 class _KeyValueField extends StatefulWidget {
@@ -1276,7 +1276,7 @@ class _KVRow {
   String value = '';
 }
 
-/// File picker field — uses the HTML file input to select a file.
+/// File picker field - uses the HTML file input to select a file.
 /// Reads the file as base64 and passes (fileName, base64Content) to onChanged.
 class _FilePickerField extends StatefulWidget {
   final String label;
@@ -1368,11 +1368,11 @@ class _FilePickerFieldState extends State<_FilePickerField> {
 
 /// TextInputFormatter that adds thousand separators (commas) to numbers.
 ///
-/// For `integerOnly: true` — only digits are allowed, grouped as 1,234,567.
-/// For `integerOnly: false` — digits and one decimal point are allowed,
+/// For `integerOnly: true` - only digits are allowed, grouped as 1,234,567.
+/// For `integerOnly: false` - digits and one decimal point are allowed,
 /// formatted as 1,234,567.89.
 ///
-/// The raw numeric value (without commas) is what the form submits —
+/// The raw numeric value (without commas) is what the form submits  - 
 /// the formatter stores the display value (with commas) in the field
 /// and the raw value can be recovered by stripping commas.
 class ThousandsInputFormatter extends TextInputFormatter {
@@ -1444,15 +1444,15 @@ class ThousandsInputFormatter extends TextInputFormatter {
 // `Native` widget with `widget_name: "policy_simulator"`. The dash's
 // native-widget registry maps that name to this stateful host, which the
 // page configures via `props`:
-//   save_endpoint  — admin-relative POST alias carrying the set name
+//   save_endpoint  - admin-relative POST alias carrying the set name
 //                    (e.g. `/v1/admin/policy-sets/{name}/save`)
-//   test_endpoint  — admin-relative dry-run alias (e.g. `…/{name}/test`)
-//   default_action — pre-filled sample action id
-//   service        — colon service_type (label only)
+//   test_endpoint  - admin-relative dry-run alias (e.g. `…/{name}/test`)
+//   default_action - pre-filled sample action id
+//   service        - colon service_type (label only)
 // and fetches the current set via `data_endpoint`.
 //
 // Trust boundary: the simulation is a SERVER-side dry-run through
-// `actions.rawPost` — the browser never evaluates policy (§3.3: Shield is
+// `actions.rawPost` - the browser never evaluates policy (§3.3: Shield is
 // the single in-process decision point; live identity resolution only
 // exists server-side). This host is form + display logic only.
 class PolicySimulatorWidget extends StatefulWidget {
@@ -1502,7 +1502,7 @@ class _PolicySimulatorWidgetState extends State<PolicySimulatorWidget> {
       widget.props['test_endpoint'] as String? ?? '';
   String get _setName {
     // The page definition embeds the CONCRETE set name per-set (the page is
-    // generated by the service for `policy-sets/{name}/edit`) — no renderer
+    // generated by the service for `policy-sets/{name}/edit`) - no renderer
     // substitution is needed here (§3.7). Falls back to the fetched row for
     // hosts that render the page without per-set props.
     final fromProps = (widget.props['policy_set_name'] as String? ?? '').trim();
@@ -1724,7 +1724,7 @@ class _PolicySimulatorWidgetState extends State<PolicySimulatorWidget> {
           ),
         ),
         const SizedBox(height: 16),
-        // Simulator card — server-side dry-run, never client-side eval.
+        // Simulator card - server-side dry-run, never client-side eval.
         Card(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -1734,7 +1734,7 @@ class _PolicySimulatorWidgetState extends State<PolicySimulatorWidget> {
                 Text('Simulation Playground', style: theme.textTheme.titleMedium),
                 const SizedBox(height: 4),
                 Text(
-                  'Evaluates your candidate text on the service (dry-run endpoint) — the decision engine stays in-process per §3.3.',
+                  'Evaluates your candidate text on the service (dry-run endpoint) - the decision engine stays in-process per §3.3.',
                   style: theme.textTheme.bodySmall,
                 ),
                 const SizedBox(height: 12),

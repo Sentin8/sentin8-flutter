@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Sentin8:Flutter
 // SPDX-License-Identifier: Apache-2.0
 
-/// Sentin8 spacing scale — 4px grid.
+/// Sentin8 spacing scale - 4px grid.
 class Sentin8Spacing {
   const Sentin8Spacing._();
 

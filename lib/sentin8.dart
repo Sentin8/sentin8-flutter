@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Sentin8:Flutter
 // SPDX-License-Identifier: Apache-2.0
 
-// sentin8 — Unified Flutter SDK for Sentin8 apps.
+// sentin8 - Unified Flutter SDK for Sentin8 apps.
 //
 // This package provides the shared design system, BFF client, auth provider,
 // routing, realtime (SSE + WebSocket), hooks, widgets, and observability

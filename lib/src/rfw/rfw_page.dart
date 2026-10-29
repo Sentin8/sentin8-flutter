@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Sentin8:Flutter
 // SPDX-License-Identifier: Apache-2.0
 
-// Shared RFW page widget — fetches and renders remote admin UI pages.
+// Shared RFW page widget - fetches and renders remote admin UI pages.
 //
 // Used by both Sentin8:Dash and vertical admin apps (e.g. Bank8:Admin).
 // The app provides a [BffApiClient] for the target service and a navigation
@@ -81,13 +81,13 @@ class _Sentin8RfwPageState extends State<Sentin8RfwPage> {
       _error = null;
     });
 
-    // Build the cache key — include the type param so different product
+    // Build the cache key - include the type param so different product
     // type forms don't collide in the cache.
     final cacheKey = widget.extraProps != null && widget.extraProps!['type'] != null
         ? '${widget.page}?type=${widget.extraProps!['type']}'
         : widget.page;
 
-    // Try cache first — but skip cache for pages with extraProps (e.g.
+    // Try cache first - but skip cache for pages with extraProps (e.g.
     // ?type=current_account) since those have dynamic content (internal
     // account dropdowns populated from the DB).
     final skipCache = widget.extraProps != null && widget.extraProps!.isNotEmpty;
@@ -124,7 +124,7 @@ class _Sentin8RfwPageState extends State<Sentin8RfwPage> {
 
       if (adminResponse.responseType == 'page' && adminResponse.page != null) {
         print('[Sentin8RfwPage] Page title: ${adminResponse.page!.title}, widgets: ${adminResponse.page!.widgets.length}, actions: ${adminResponse.page!.actions.length}');
-        // Only cache static pages (no extraProps) — dynamic pages with
+        // Only cache static pages (no extraProps) - dynamic pages with
         // extraProps (e.g. product forms with internal account dropdowns)
         // must re-fetch every time to get fresh DB data.
         if (!skipCache) {
@@ -203,7 +203,7 @@ class _Sentin8RfwPageState extends State<Sentin8RfwPage> {
           ),
         ),
         const Divider(height: 1),
-        // Page content — render widgets via RFW renderer.
+        // Page content - render widgets via RFW renderer.
         Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -214,7 +214,7 @@ class _Sentin8RfwPageState extends State<Sentin8RfwPage> {
                   widget.onNavigate(route);
                 },
                 onRowClick: (rowId) {
-                  // Row click — no-op by default.
+                  // Row click - no-op by default.
                 },
                 fetchData: (endpoint) async {
                   try {

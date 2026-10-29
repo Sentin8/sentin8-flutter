@@ -41,7 +41,7 @@ class AppRuntimeContext {
   final Map<String, bool> featureFlags;
   final String instanceAuthDomain;
   final bool allowSignup;
-  /// The app instance UUID (`application_id` from the runtime context) —
+  /// The app instance UUID (`application_id` from the runtime context)  - 
   /// used to derive the ID-based instance group name (§6.0c).
   final String applicationId;
 
@@ -87,7 +87,7 @@ class AppRuntimeContext {
   /// ID-based naming (architecture-principles §6.0c): the group is
   /// provisioned by the platform app service under the instance UUID →
   /// `sentin8:app:{application_id}` (the display-name-derived snake_case
-  /// form is retired — its three implementations had drifted, AUTH-3).
+  /// form is retired - its three implementations had drifted, AUTH-3).
   String get instanceGroupName => 'sentin8:app:$applicationId';
 
   /// Whether this app allows public sign-up (customer mode).
@@ -106,10 +106,10 @@ class AppRuntimeContext {
     }
 
     // Auth domain precedence (Story 12.4.2):
-    // 1. `auth_domain` — the per-instance auth selected at install time
+    // 1. `auth_domain` - the per-instance auth selected at install time
     //    (e.g. `auth.staff.{org}` for staff apps whose users live in the
     //    org-scoped staff env). This is where the app's users authenticate.
-    // 2. `sentin8_auth_domain` — the env's own auth (e.g. `auth.{env}.{org}`),
+    // 2. `sentin8_auth_domain` - the env's own auth (e.g. `auth.{env}.{org}`),
     //    correct for customer apps installed in the same env as their users.
     // Staff apps are installed in the prod env but their users exist in the
     // staff env, so the env auth would 401 every staff sign-in.

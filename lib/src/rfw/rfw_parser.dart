@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Sentin8:Flutter
 // SPDX-License-Identifier: Apache-2.0
 
-// RFW Parser — deserializes JSON RFW definitions into typed Dart objects.
+// RFW Parser - deserializes JSON RFW definitions into typed Dart objects.
 //
 // The JSON structure mirrors the Rust `sentin8-rfw` crate types (widget.rs,
 // page.rs, response.rs).

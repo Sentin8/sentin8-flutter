@@ -30,5 +30,5 @@ String toMinorUnits(String majorAmount) {
   return (major * 100).round().toString();
 }
 
-/// Money input formatter regex — allows digits with up to 2 decimal places.
+/// Money input formatter regex - allows digits with up to 2 decimal places.
 final moneyInputRegex = RegExp(r'^\d*\.?\d{0,2}');

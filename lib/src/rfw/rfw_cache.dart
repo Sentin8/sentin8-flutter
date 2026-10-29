@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Sentin8:Flutter
 // SPDX-License-Identifier: Apache-2.0
 
-// RFW Cache — LRU cache of fetched RFW definitions.
+// RFW Cache - LRU cache of fetched RFW definitions.
 //
 // Keyed by `{service}/{page}`. Invalidated on navigation or explicit refresh.
 

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Sentin8:Flutter
 // SPDX-License-Identifier: Apache-2.0
 
-// BFF cookie-based session management — generic auth provider.
+// BFF cookie-based session management - generic auth provider.
 //
 // Pattern:
 // - BFF holds all OAuth tokens server-side (token guardian)
@@ -89,7 +89,7 @@ class AppUser {
 /// Auth provider manages BFF session state.
 ///
 /// Uses ChangeNotifier for reactive updates. On web, the __Host-bff-session
-/// cookie is HttpOnly so we cannot read it directly — we must call BFF
+/// cookie is HttpOnly so we cannot read it directly - we must call BFF
 /// /auth/session to check if the user is signed in.
 ///
 /// [logPrefix] is used for debug logging (e.g. 'eBank', 'eTeller').
@@ -224,7 +224,7 @@ class BffAuthProvider extends ChangeNotifier {
         });
       }
     } catch (_) {
-      // Best effort — clear local state regardless
+      // Best effort - clear local state regardless
     }
     _state = const AuthState(isLoaded: true);
     notifyListeners();
