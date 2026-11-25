@@ -14,10 +14,8 @@
 
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-// ignore: avoid_web_libraries_in_flutter
-import 'package:web/web.dart' as web;
-import 'dart:js_interop';
+
+import 'auth_transport.dart';
 
 /// Auth state for the app.
 class AuthState {
@@ -98,12 +96,19 @@ class BffAuthProvider extends ChangeNotifier {
   final String authDomain;
   final String logPrefix;
 
+  /// Opaque BFF session credential for the native transport (WS1 handoff).
+  ///
+  /// Ignored on web, where the HttpOnly `bff-session` cookie is the credential.
+  /// This is a session id, never an OAuth access or refresh token.
+  String? sessionToken;
+
   AuthState _state = const AuthState();
 
   BffAuthProvider({
     required this.bffBaseUrl,
     required this.authDomain,
     this.logPrefix = 'App',
+    this.sessionToken,
   });
 
   AuthState get state => _state;
@@ -137,51 +142,29 @@ class BffAuthProvider extends ChangeNotifier {
   /// Fetch session from BFF. Returns null if not signed in.
   Future<_SessionData?> fetchSession() async {
     print('[$logPrefix] fetchSession: calling $bffBaseUrl/auth/session');
+    final String? raw;
     if (kIsWeb) {
-      final response = await web.window.fetch(
-        '$bffBaseUrl/auth/session'.toJS,
-        web.RequestInit(
-          method: 'GET',
-          credentials: 'include',
-        ),
-      ).toDart;
-      print('[$logPrefix] fetchSession: response status=${response.status}');
-      if (response.status != 200) {
-        return null;
-      }
-      final raw = (await response.text().toDart).toDart;
-      final json = jsonDecode(raw) as Map<String, dynamic>;
-      final userJson = json['user'] as Map<String, dynamic>?;
-      if (userJson == null) return null;
-
-      final scopes = _parseScopes(json['scopes'] ?? json['scope']);
-
-      return _SessionData(
-        user: AppUser.fromJson(userJson),
-        scopes: scopes,
-        csrfToken: json['csrf_token'] as String? ?? json['csrfToken'] as String?,
-      );
+      raw = await fetchSessionJson(bffBaseUrl);
+    } else {
+      raw = await fetchSessionJson(bffBaseUrl, sessionToken: sessionToken);
     }
-    // Non-web (mobile): use the standard http client.
-    final url = Uri.parse('$bffBaseUrl/auth/session');
-    final response = await http.get(url, headers: {
-      'Accept': 'application/json',
-    });
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      final userJson = json['user'] as Map<String, dynamic>?;
-      if (userJson == null) return null;
-
-      final scopes = _parseScopes(json['scopes'] ?? json['scope']);
-
-      return _SessionData(
-        user: AppUser.fromJson(userJson),
-        scopes: scopes,
-        csrfToken: json['csrf_token'] as String? ?? json['csrfToken'] as String?,
-      );
+    if (raw == null) {
+      print('[$logPrefix] fetchSession: no session');
+      return null;
     }
-    return null;
+
+    final json = jsonDecode(raw) as Map<String, dynamic>;
+    final userJson = json['user'] as Map<String, dynamic>?;
+    if (userJson == null) return null;
+
+    final scopes = _parseScopes(json['scopes'] ?? json['scope']);
+
+    return _SessionData(
+      user: AppUser.fromJson(userJson),
+      scopes: scopes,
+      csrfToken:
+          json['csrf_token'] as String? ?? json['csrfToken'] as String?,
+    );
   }
 
   /// Redirect to BFF login → Auth OAuth authorize flow.
@@ -200,28 +183,13 @@ class BffAuthProvider extends ChangeNotifier {
   Future<void> signOut() async {
     try {
       if (kIsWeb) {
-        final h = web.Headers();
-        h.set('Accept', 'application/json');
-        h.set('Content-Type', 'application/json');
-        if (_state.csrfToken != null) {
-          h.set('X-BFF-CSRF', _state.csrfToken!);
-        }
-        await web.window.fetch(
-          '$bffBaseUrl/auth/sign-out'.toJS,
-          web.RequestInit(
-            method: 'POST',
-            credentials: 'include',
-            headers: h,
-            body: '{}'.toJS,
-          ),
-        ).toDart;
+        await postSignOut(bffBaseUrl, _state.csrfToken);
       } else {
-        final url = Uri.parse('$bffBaseUrl/auth/sign-out');
-        await http.post(url, headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          if (_state.csrfToken != null) 'X-BFF-CSRF': _state.csrfToken!,
-        });
+        await postSignOut(
+          bffBaseUrl,
+          _state.csrfToken,
+          sessionToken: sessionToken,
+        );
       }
     } catch (_) {
       // Best effort - clear local state regardless

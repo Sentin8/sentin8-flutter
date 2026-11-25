@@ -3,47 +3,16 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Sentin8:Flutter
 // SPDX-License-Identifier: Apache-2.0
 
-// URL hash router utility.
+// URL hash router utility - platform selection.
 //
-// Provides global helpers for updating the browser URL hash from any
-// widget (sidebar nav, in-page item clicks, back button). Pages call
-// `navigateTo('/messages/123')` and the address bar updates.
+// The web implementation drives `window.history`; the IO implementation is a
+// deliberate no-op, because a native app has no address bar and no hash.
+// Native navigation state belongs to the widget layer (Navigator /
+// go_router), not to a global URL helper.
 //
-// The app shell reads the initial route from the hash on startup and
-// listens to popstate for browser back/forward.
+// `dart.library.js_interop` is the correct predicate: `dart.library.html` no
+// longer distinguishes modern web from wasm, and `kIsWeb` is a runtime check
+// that cannot rescue a compile-time import.
 
-import 'package:flutter/foundation.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'package:web/web.dart' as web;
-
-/// Update the browser URL hash to reflect the current page/view.
-/// Uses `replaceState` so it doesn't add a new history entry on every
-/// click (avoids back-button spam within a single page).
-void navigateTo(String route) {
-  if (!kIsWeb) return;
-  web.window.history.replaceState(null, '', '#$route');
-}
-
-/// Push a new history entry (for sub-page navigation like message detail
-/// so the browser back button returns to the list).
-void pushRoute(String route) {
-  if (!kIsWeb) return;
-  web.window.history.pushState(null, '', '#$route');
-}
-
-/// Go back in browser history.
-void goBack() {
-  if (!kIsWeb) return;
-  web.window.history.back();
-}
-
-/// Get the current route from the URL hash.
-String currentRoute() {
-  if (!kIsWeb) return '/';
-  final hash = web.window.location.hash;
-  if (hash.isNotEmpty && hash.startsWith('#')) {
-    final route = hash.substring(1);
-    return route.isEmpty ? '/' : route;
-  }
-  return '/';
-}
+export 'url_router_io.dart'
+    if (dart.library.js_interop) 'url_router_web.dart';

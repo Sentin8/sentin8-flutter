@@ -8,13 +8,10 @@
 // Supports: Container, Text, DataTable, Form, Button, Card, Chart, Native,
 // Row, Column, Spacer.
 
-import 'dart:convert';
-import 'dart:html' as html;
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'rfw_parser.dart';
+import 'rfw_file_picker.dart';
 
 /// Renders a list of RemoteWidget definitions into a Flutter widget tree.
 class RfwRenderer extends StatelessWidget {
@@ -1296,31 +1293,18 @@ class _FilePickerFieldState extends State<_FilePickerField> {
   bool _loading = false;
 
   Future<void> _pickFile() async {
-    final input = html.FileUploadInputElement()..accept = '*/*';
-    input.click();
-
-    input.onChange.listen((_) async {
-      final files = input.files;
-      if (files == null || files.isEmpty) return;
-
-      setState(() => _loading = true);
-      final file = files[0];
-      final reader = html.FileReader();
-
-      reader.onLoadEnd.listen((_) {
-        final result = reader.result;
-        if (result is Uint8List) {
-          final base64Content = base64Encode(result);
-          setState(() {
-            _fileName = file.name;
-            _loading = false;
-          });
-          widget.onChanged(file.name, base64Content);
-        }
-      });
-
-      reader.readAsArrayBuffer(file);
+    setState(() => _loading = true);
+    final picked = await pickFileAsBase64();
+    if (!mounted) return;
+    if (picked == null) {
+      setState(() => _loading = false);
+      return;
+    }
+    setState(() {
+      _fileName = picked.name;
+      _loading = false;
     });
+    widget.onChanged(picked.name, picked.base64Content);
   }
 
   @override

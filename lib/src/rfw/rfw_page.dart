@@ -19,7 +19,6 @@
 //   )
 
 import 'package:flutter/material.dart';
-import 'package:web/web.dart' as web;
 
 import '../bff/bff_client.dart';
 import 'rfw_parser.dart';

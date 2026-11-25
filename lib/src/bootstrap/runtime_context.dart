@@ -12,8 +12,8 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-// ignore: avoid_web_libraries_in_flutter
-import 'package:web/web.dart' as web;
+
+import 'hostname_source.dart';
 
 /// Runtime context resolved from App via TLS-injected headers.
 ///
@@ -160,23 +160,28 @@ class AppRuntimeContext {
 
 /// Fetch runtime context from App /v1/app/runtime/context endpoint.
 /// The request is routed through TLS which injects X-Sentin8-* headers
-/// based on the hostname. No API key or hostname parameter is needed.
+/// based on the hostname. No API key is needed.
 ///
 /// [appBaseUrl] defaults to https://sentin8-app.ops.sys.local.sentin8.dev.
+/// [hostname] overrides the `X-Sentin8-Hostname` header. On the web it is
+/// derived from `window.location`; on native there is no location bar, so the
+/// caller MUST supply the enrolled instance host - a missing value fails closed
+/// rather than silently defaulting (see [resolveHostname]).
 /// [logPrefix] is used for debug logging (e.g. 'eBank', 'eTeller').
 Future<AppRuntimeContext> fetchRuntimeContext({
   String? appBaseUrl,
+  String? hostname,
   String logPrefix = 'App',
 }) async {
   final base = appBaseUrl ?? 'https://sentin8-app.ops.sys.local.sentin8.dev';
 
   final url = Uri.parse('$base/v1/app/runtime/context');
 
-  final hostname = _getCurrentHostname();
-  print('[$logPrefix] fetchRuntimeContext: url=$url hostname=$hostname');
+  final resolvedHostname = resolveHostname(hostname);
+  print('[$logPrefix] fetchRuntimeContext: url=$url hostname=$resolvedHostname');
   final response = await http.get(url, headers: {
     'Accept': 'application/json',
-    'X-Sentin8-Hostname': hostname,
+    'X-Sentin8-Hostname': resolvedHostname,
   });
 
   print('[$logPrefix] fetchRuntimeContext: response status=${response.statusCode} body=${response.body.length} chars');
@@ -209,15 +214,6 @@ Future<AppRuntimeContext> fetchRuntimeContext({
   }
 
   return ctx;
-}
-
-/// Get the current hostname from the browser.
-String _getCurrentHostname() {
-  try {
-    return web.window.location.hostname;
-  } catch (_) {
-    return 'localhost';
-  }
 }
 
 class BootstrapException implements Exception {
