@@ -26,6 +26,17 @@ class LandingPage extends StatelessWidget {
   final String? descriptionText;
   final IconData defaultIcon;
 
+  /// Override for the Sign In button.
+  ///
+  /// Native has no address bar to redirect to, so it supplies the handoff flow
+  /// (system browser + custom-scheme return) instead of the default
+  /// `auth.signInWithAuth()`. When null the default browser redirect is used,
+  /// which is what every web build wants.
+  final VoidCallback? onSignIn;
+
+  /// Override for the Sign Up button. See [onSignIn].
+  final VoidCallback? onSignUp;
+
   const LandingPage({
     super.key,
     required this.runtimeContext,
@@ -33,6 +44,8 @@ class LandingPage extends StatelessWidget {
     this.welcomeText,
     this.descriptionText,
     this.defaultIcon = Icons.account_balance,
+    this.onSignIn,
+    this.onSignUp,
   });
 
   @override
@@ -80,7 +93,7 @@ class LandingPage extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () => auth.signInWithAuth(),
+                        onPressed: onSignIn ?? () => auth.signInWithAuth(),
                         child: const Text('Sign In'),
                       ),
                     ),
@@ -88,7 +101,7 @@ class LandingPage extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: () => auth.signUpWithAuth(),
+                        onPressed: onSignUp ?? () => auth.signUpWithAuth(),
                         child: const Text('Sign Up'),
                       ),
                     ),

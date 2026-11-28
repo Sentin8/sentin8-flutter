@@ -57,6 +57,7 @@ export 'src/shell/landing_page.dart';
 export 'src/observability/logger.dart';
 
 // === RFW (Remote Flutter Widgets) ===
+export 'src/rfw/native_widget_registry.dart';
 export 'src/rfw/rfw_parser.dart';
 export 'src/rfw/rfw_renderer.dart';
 export 'src/rfw/rfw_cache.dart';
